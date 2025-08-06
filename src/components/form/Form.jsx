@@ -1,5 +1,6 @@
 import React from "react";
 import { useEffect, useState } from "react";
+import guru from "./data-guru.json";
 
 const API_URL = import.meta.env.VITE_GS_API_URL;
 
@@ -65,9 +66,18 @@ export default function Form() {
               className="select select-lg w-full"
               onChange={(e) => setNama(e.target.value)}
             >
-              <option disabled={true}>Pilih Nama Guru</option>
-              <option>Chrome</option>
-              <option>FireFox</option>
+              <option disabled={true} className="text-xs">
+                Pilih Nama Guru
+              </option>
+              {guru.map((g, i) => (
+                <option
+                  key={i}
+                  value={g.kode}
+                  // disabled={g.status !== "available"}
+                >
+                  {g.nama}
+                </option>
+              ))}
             </select>
           </fieldset>
 
@@ -121,7 +131,9 @@ export default function Form() {
               className="select select-lg w-full"
               onChange={(e) => setJam(e.target.value)}
             >
-              <option disabled={true}>Pilih Jam</option>
+              <option disabled={true} className="text-xs">
+                Pilih Jam
+              </option>
               {jamList.map((j, i) => (
                 <option
                   key={i}
