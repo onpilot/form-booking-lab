@@ -5,7 +5,7 @@ const catatan = [
   },
   {
     icon: "🎯",
-    text: "Mohon melakukan booking H-3 sampai H-1 pelaksanaan kegiatan, sesuai ketersediaan jadwal.",
+    text: "Booking dapat dilakukan mulai H-2 pelaksanaan kegiatan, sesuai ketersediaan jadwal.",
   },
   {
     icon: "🔄️",
@@ -13,7 +13,7 @@ const catatan = [
   },
   {
     icon: "⚠️",
-    text: "Maintenance lab. komputer rutin dilakukan setiap satu bulan sekali, di hari sabtu jam ke-5 dan 6 (jika ruang lab komputer tidak dipakai)",
+    text: "Maintenance lab. komputer rutin dilakukan setiap satu bulan sekali, di hari sabtu jam ke-5 dan 6 (jika ruang lab. komputer tidak dipakai)",
   },
 ];
 

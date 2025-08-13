@@ -1,11 +1,12 @@
 import React from "react";
 import { useEffect, useState } from "react";
-import guru from "./data-guru.json";
+
+import DATA_GURU from "./data-guru.json";
 
 const API_URL = import.meta.env.VITE_GS_API_URL;
 
 export default function Form() {
-  const [nama, setNama] = useState("");
+  const [guru, setGuru] = useState("");
   const [tanggal, setTanggal] = useState("");
   const [jam, setJam] = useState("");
   const [jamList, setJamList] = useState([]);
@@ -27,23 +28,28 @@ export default function Form() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const payload = { nama, tanggal, jam };
+    const payload = { guru, tanggal, jam };
 
-    const res = await fetch(API_URL, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload),
-    });
+    try {
+      const res = await fetch(API_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
 
-    const result = await res.json();
-    if (result.success) {
-      setStatus("✅ Berhasil disimpan!");
-      setNama("");
-      setTanggal("");
-      setJam("");
-      setJamList([]);
-    } else {
-      setStatus("❌ Gagal menyimpan data");
+      const result = await res.json();
+      if (result.success) {
+        setStatus("✅ Berhasil disimpan!");
+        setGuru("");
+        setTanggal("");
+        setJam("");
+        setJamList([]);
+      } else {
+        setStatus("❌ Gagal menyimpan data");
+      }
+    } catch (error) {
+      console.log({ error });
+      setStatus("❌ Terjadi kesalahan saat mengirim data");
     }
   };
 
@@ -64,18 +70,18 @@ export default function Form() {
             <select
               defaultValue="Pilih Nama Guru"
               className="select select-lg w-full"
-              onChange={(e) => setNama(e.target.value)}
+              onChange={(e) => setGuru(e.target.value)}
             >
               <option disabled={true} className="text-xs">
                 Pilih Nama Guru
               </option>
-              {guru.map((g, i) => (
+              {DATA_GURU.map((dg, i) => (
                 <option
                   key={i}
-                  value={g.kode}
-                  // disabled={g.status !== "available"}
+                  value={dg.kode}
+                  // disabled={dg.status !== "available"}
                 >
-                  {g.nama}
+                  {dg.nama}
                 </option>
               ))}
             </select>
@@ -117,9 +123,16 @@ export default function Form() {
 
           <fieldset className="fieldset">
             <legend className="fieldset-legend">Tanggal</legend>
+            {/* Hanya bisa pilih tanggal sekarang dan tanggal H+2. */}
             <input
               type="date"
               className="input input-lg w-full"
+              min={new Date().toISOString().split("T")[0]} // hari ini
+              max={
+                new Date(Date.now() + 2 * 24 * 60 * 60 * 1000) // H+2
+                  .toISOString()
+                  .split("T")[0]
+              }
               onChange={(e) => setTanggal(e.target.value)}
             />
           </fieldset>
@@ -132,7 +145,7 @@ export default function Form() {
               onChange={(e) => setJam(e.target.value)}
             >
               <option disabled={true} className="text-xs">
-                Pilih Jam
+                {tanggal ? "Pilih Jam" : "Pilih tanggal terlebih dahulu"}
               </option>
               {jamList.map((j, i) => (
                 <option
@@ -150,12 +163,12 @@ export default function Form() {
             <button
               className="btn btn-primary btn-lg w-full"
               type="submit"
-              disabled={!jam || !nama || !tanggal}
+              disabled={!jam || !guru || !tanggal}
             >
               Kirim
             </button>
             <p>
-              Nama: {nama}, tanggal: {tanggal}, jam: {jam}
+              Kode Guru: {guru}, tanggal: {tanggal}, jam: {jam}
             </p>
             <p>Status: {status}</p>
           </div>
